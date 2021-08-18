@@ -11,3 +11,4 @@ To contribute:
 1. Export the postman collection.
 2. Copy to the repository
 3. Push the changes
+4. You rock 🤘
