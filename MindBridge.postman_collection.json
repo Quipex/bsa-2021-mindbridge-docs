@@ -1,0 +1,1178 @@
+{
+	"info": {
+		"_postman_id": "e2021d3f-6372-43f7-bd59-4730fa8bb523",
+		"name": "MindBridge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "REGISTRATION",
+			"item": [
+				{
+					"name": "smoke registration",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const schema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"                \"tokens\": { \"type\": \"object\",",
+									"                \"properties\": {",
+									"                    \"accessToken\": { \"type\": \"string\" },",
+									"                    \"refreshToken\": { \"type\": \"string\" }",
+									"                },",
+									"                \"user\": { \"type\": \"object\",",
+									"                \"properties\": {",
+									"                    \"id\": { \"type\": \"string\" },",
+									"                    \"createdAt\": { \"type\": \"string\" },",
+									"                    \"nickname\": { \"type\": \"string\" },",
+									"                    \"avatar\": { \"type\": \"null\" },",
+									"                    \"email\": { \"type\": \"string\" },",
+									"                    \"firstName\": { \"type\": \"string\" },",
+									"                    \"lastname\": { \"type\": \"string\" },",
+									"                    \"password\": { \"type\": \"string\" },",
+									"                },",
+									"            }",
+									"        }",
+									"    }",
+									"};",
+									"",
+									"pm.test(\"Validate schema\", () => {",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{$randomEmail}}\",\n    \"name\": \"{{$randomFirstName}}\",\n    \"nickname\": \"{{$randomFirstName}}\",\n    \"password\": \"Pa55word\",\n    \"surname\": \"{{$randomLastName}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "not valid data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{$randomEmail}}\",\n    \"name\": \"{{$randomFirstName}}{{$randomInt}}\",\n    \"nickname\": \"{{$randomFirstName}}@\",\n    \"password\": \"Pa55word\",\n    \"surname\": \"{{$randomLastName}}{{$randomInt}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "nodata",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"const schema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"                \"status\": { \"type\": \"string\" },",
+									"                \"code\": { \"type\": \"string\" },",
+									"                \"message\": { \"type\": \"string\" },",
+									"                \"path\": { \"type\": \"string\" },",
+									"                },",
+									"};",
+									"",
+									"pm.test(\"Validate schema\", () => {",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"\",\n    \"name\": \"\",\n    \"nickname\": \"\",\n    \"password\": \"\",\n    \"surname\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "not valid email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"var response = JSON.parse(responseBody);",
+									"",
+									"tests[\"Verify code message\"] = response.code === \"[Email is not valid.]\";",
+									"",
+									"const schema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"                \"status\": { \"type\": \"string\" },",
+									"                \"code\": { \"type\": \"string\" },",
+									"                \"message\": { \"type\": \"string\" },",
+									"                \"path\": { \"type\": \"string\" },",
+									"                },",
+									"};",
+									"",
+									"pm.test(\"Validate schema\", () => {",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"JohnSmith{{$randomInt}}@@gmail.com\",\n    \"name\": \"John\",\n    \"nickname\": \"Smithy{{$randomInt}}\",\n    \"password\": \"Pa55word\",\n    \"surname\": \"Smith\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "alredyregister",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"var response = JSON.parse(responseBody);",
+									"",
+									"tests[\"Verify user alredy exist message\"] = response.code === \"user-already-exist\";",
+									"",
+									"const schema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"                \"status\": { \"type\": \"string\" },",
+									"                \"code\": { \"type\": \"string\" },",
+									"                \"message\": { \"type\": \"string\" },",
+									"                \"path\": { \"type\": \"string\" },",
+									"                },",
+									"};",
+									"",
+									"pm.test(\"Validate schema\", () => {",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"johnsmith@gmail.com\",\n    \"name\": \"John\",\n    \"nickname\": \"Smithy\",\n    \"password\": \"Pa55word\",\n    \"surname\": \"Smith\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "LOGIN",
+			"item": [
+				{
+					"name": "smoke login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"VerifyStatus code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const schema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"                \"tokens\": { \"type\": \"object\",",
+									"                \"properties\": {",
+									"                    \"accessToken\": { \"type\": \"string\" },",
+									"                    \"refreshToken\": { \"type\": \"string\" }",
+									"                },",
+									"                \"user\": { \"type\": \"object\",",
+									"                \"properties\": {",
+									"                    \"id\": { \"type\": \"string\" },",
+									"                    \"nickname\": { \"type\": \"string\" },",
+									"                    \"avatar\": { \"type\": \"null\" },",
+									"                    \"firstName\": { \"type\": \"string\" },",
+									"                    \"lastname\": { \"type\": \"string\" }",
+									"                },",
+									"            }",
+									"        }",
+									"    }",
+									"};",
+									"",
+									"pm.test(\"Validate schema\", () => {",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"elissa.mccullough6@hotmail.com\",\n  \"password\": \"Pa55word\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "invalidpassword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"VerifyStatus code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"var response = JSON.parse(responseBody);",
+									"",
+									"tests[\"Verify code message\"] = response.code === \"Invalid password\";",
+									"",
+									"const schema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"                \"status\": { \"type\": \"string\" },",
+									"                \"code\": { \"type\": \"string\" },",
+									"                \"message\": { \"type\": \"string\" },",
+									"                \"path\": { \"type\": \"string\" },",
+									"                },",
+									"};",
+									"",
+									"pm.test(\"Validate schema\", () => {",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"johnsmith@gmail.com\",\n  \"password\": \"Pa55wor{{$randomInt}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "invalidemail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"VerifyStatus code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"var response = JSON.parse(responseBody);",
+									"",
+									"tests[\"Verify code message\"] = response.code === \"email-not-found\";",
+									"",
+									"const schema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"                \"status\": { \"type\": \"string\" },",
+									"                \"code\": { \"type\": \"string\" },",
+									"                \"message\": { \"type\": \"string\" },",
+									"                \"path\": { \"type\": \"string\" },",
+									"                },",
+									"};",
+									"",
+									"pm.test(\"Validate schema\", () => {",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"johnsmit{{$randomInt}}@gmail.com\",\n  \"password\": \"Pa55word\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "IMAGE",
+			"item": [
+				{
+					"name": "smoke image",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"https://mindbridgestorage.blob.core.windows.net/mindbridge-blob/\");",
+									"});"
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "adrian-infernus-GLf7bAwCdYg-unsplash.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/image/save",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"image",
+								"save"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "not image",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "MindBridge.xmind"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/image/save",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"image",
+								"save"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "max File Size Exceeded",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "lilia54.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/image/save",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"image",
+								"save"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POSTS",
+			"item": [
+				{
+					"name": "smoke post by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const schema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"id\": { \"type\": \"string\" },",
+									"        \"createdAt\": { \"type\": \"string\" },",
+									"        \"updatedAt\": { \"type\": \"string\" },",
+									"        \"title\": { \"type\": \"string\" },",
+									"        \"text\": { \"type\": \"string\" },",
+									"        \"author\": { \"type\": \"object\",",
+									"                    \"properties\": {",
+									"                    \"id\": { \"type\": \"string\" },",
+									"                    \"createdAt\": { \"type\": \"string\" },",
+									"                    \"nickname\": { \"type\": \"null\" },",
+									"                    \"avatar\": { \"type\": \"null\" },",
+									"                    \"email\": { \"type\": \"string\" },",
+									"                    \"firstName\": { \"type\": \"string\" },",
+									"                    \"lastName\": { \"type\": \"string\" },",
+									"                    \"password\": { \"type\": \"string\" },",
+									"                }},",
+									"        \"tags\": { \"type\": \"array\",",
+									"                    \"properties\": {",
+									"                        \"id\": { \"type\": \"string\" },",
+									"                        \"name\": { \"type\": \"string\" }",
+									"                    }},",
+									"        \"comments\": { \"type\": \"array\",",
+									"                    \"properties\": {",
+									"                        \"id\": { \"type\": \"string\" },",
+									"                        \"createdAt\": { \"type\": \"string\" },",
+									"                        \"updatedAt\": { \"type\": \"string\" },",
+									"                        \"text\": { \"type\": \"string\" },",
+									"                        \"author\": { \"type\": \"object\",",
+									"                                \"properties\": {",
+									"                                \"id\": { \"type\": \"string\" },",
+									"                                \"createdAt\": { \"type\": \"string\" },",
+									"                                \"nickname\": { \"type\": \"null\" },",
+									"                                \"avatar\": { \"type\": \"null\" },",
+									"                                \"email\": { \"type\": \"string\" },",
+									"                                \"firstName\": { \"type\": \"string\" },",
+									"                                \"lastName\": { \"type\": \"string\" },",
+									"                                \"password\": { \"type\": \"string\" },",
+									"                        \"rating\": { \"type\": \"number\" },",
+									"                        \"comments\": { \"type\": \"array\"}",
+									"                }},",
+									"                    }},",
+									"        \"rating\": { \"type\": \"number\" },",
+									"        \"coverImage\": { \"type\": \"null\" },",
+									"        \"markdown\": { \"type\": \"boolean\" }",
+									"    }",
+									"};",
+									"",
+									"pm.test(\"Validate schema\", () => {",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/post/95a46088-b143-483d-a86c-3d6be6fd2e6d",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"post",
+								"95a46088-b143-483d-a86c-3d6be6fd2e6d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const schema = {",
+									"    \"type\": \"array\",",
+									"    \"properties\": {",
+									"        \"id\": { \"type\": \"string\" },",
+									"        \"title\": { \"type\": \"string\" },",
+									"        \"text\": { \"type\": \"string\" },",
+									"        \"authorName\": { \"type\": \"string\" },",
+									"        \"createdAt\": { \"type\": \"string\" },",
+									"        \"commentsCount\": { \"type\": \"number\"},",
+									"        \"likesCount\": { \"type\": \"number\"},",
+									"        \"disLikesCount\": { \"type\": \"number\"},",
+									"        \"postRating\": { \"type\": \"number\"},",
+									"        \"avatar\": { \"type\": \"null\"},",
+									"        \"usersCount\": { \"type\": \"number\"},",
+									"        \"tags\": { \"type\": \"array\",",
+									"                    \"properties\": {",
+									"                        \"id\": { \"type\": \"string\" },",
+									"                        \"name\": { \"type\": \"string\" }",
+									"                    }},",
+									"        \"coverImage\": { \"type\": \"null\" },",
+									"        \"markdown\": { \"type\": \"boolean\" }",
+									"    }",
+									"};",
+									"",
+									"pm.test(\"Validate schema\", () => {",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/post/all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"post",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NW smoke create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"author\": \"8cf49def-7a90-4a20-b701-f379f4bda0cf\",\n  \"draft\": false,\n  \"markdown\": false,\n  \"tags\": [\n    \"b280ecd5-243f-4b55-ba4e-4777ef49453b\"\n  ],\n  \"text\": \"{{$randomLoremParagraph}}\",\n  \"title\": \"{{$randomLoremSentence}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/post/create",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"post",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "smoke edit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"draft\": false,\n  \"markdown\": false,\n  \"postId\": \"31e2d366-84da-438e-ba81-d0bac92a3988\",\n  \"tags\": [\"a099b732-23ba-49aa-9b94-a9541b1c18b7\"],\n  \"text\": \"{{$randomLoremParagraph}}\",\n  \"title\": \"{{$randomLoremSentence}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/post/edit",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"post",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TAGS",
+			"item": [
+				{
+					"name": "smoke tags",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const schema = {",
+									"    \"type\": \"array\",",
+									"    \"properties\": {",
+									"                    \"id\": { \"type\": \"string\" },",
+									"                    \"name\": { \"type\": \"string\" }",
+									"                },",
+									"            };",
+									"",
+									"pm.test(\"Validate schema\", () => {",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/tag/all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tag",
+								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SEARCH",
+			"item": [
+				{
+					"name": "smoke",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/search/?query=net",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"search",
+								""
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "net"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "by author",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/search/author/?query=Mary",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"search",
+								"author",
+								""
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "Mary"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "by tags",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/search/tags/?query=java",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"search",
+								"tags",
+								""
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "java"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "clear",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/search/clear",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"search",
+								"clear"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "NOTIFICATIONS",
+			"item": [
+				{
+					"name": "smoke count",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var count = responseBody;",
+									"",
+									"tests[\"Verify count\"] = count === \"0\";",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/notification/count/8cf49def-7a90-4a20-b701-f379f4bda0cf",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"notification",
+								"count",
+								"8cf49def-7a90-4a20-b701-f379f4bda0cf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const schema = {",
+									"    \"type\": \"array\"",
+									"};",
+									"",
+									"pm.test(\"Validate schema\", () => {",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/notification/list/8cf49def-7a90-4a20-b701-f379f4bda0cf",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"notification",
+								"list",
+								"8cf49def-7a90-4a20-b701-f379f4bda0cf"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "USER INFO",
+			"item": [
+				{
+					"name": "smoke user info",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const schema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"                    \"id\": { \"type\": \"string\" },",
+									"                    \"fullName\": { \"type\": \"string\" },",
+									"                    \"nickname\": { \"type\": \"string\" },",
+									"                    \"avatar\": { \"type\": \"string\" },",
+									"                    \"postsQuantity\": { \"type\": \"number\" },",
+									"                    \"followersQuantity\": { \"type\": \"number\" },",
+									"                    \"rating\": { \"type\": \"number\" }",
+									"            }",
+									"        };",
+									"",
+									"pm.test(\"Validate schema\", () => {",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/user/8cf49def-7a90-4a20-b701-f379f4bda0cf",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"8cf49def-7a90-4a20-b701-f379f4bda0cf"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://mindbridge-lb-252634146.eu-west-1.elb.amazonaws.com/api"
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYXJ5Y2xhcmVAZ21haWwuY29tIiwiZXhwIjoxNjMxNDI4MjA0fQ.BLyIwmK3vwkpQLCLySQWbte0WHeQXc6DlJdnOqIGKbUEGP9uMU1UDygNUjxIPxA2E9YkyWBD2LOgeXTF9ZtHlQ"
+		}
+	]
+}
